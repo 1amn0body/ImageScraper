@@ -2,9 +2,11 @@ from img_dl import XKCD, APOD
 
 
 def run():
-    apod = APOD("path", 0)
+    # apod = APOD("")
 
-    xkcd = XKCD("path", 0)
+    # xkcd = XKCD("", 30)
+    # xkcd.get_from_count()
+    pass
 
 
 if __name__ == '__main__':

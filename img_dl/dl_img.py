@@ -1,21 +1,17 @@
 from abc import ABC, abstractmethod
 
 import requests
-from bs4 import BeautifulSoup
 from os.path import basename, sep
 
 
-class DlImg(ABC):
+class DownloadImages(ABC):
     base_url: str
-    soup: BeautifulSoup
 
     saved_list: list = []
     base_path: str
     count: int
 
-    position: object
-
-    def __init__(self, base_path: str, count: int) -> None:
+    def __init__(self, base_path: str, count: int = 0) -> None:
         self.base_path = base_path
         self.count = count
 
@@ -31,8 +27,9 @@ class DlImg(ABC):
             print(f"Writing of file '{file_name}' not allowed.")
         except FileExistsError:
             print(f"File '{file_name}' already exists.")
-        except Exception:
+        except Exception as e:
             print(f"Error creating file '{file_name}' and or appending content.")
+            print(e)
 
     def get_saved_list(self) -> list:
         return self.saved_list
@@ -43,7 +40,7 @@ class DlImg(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def get_image(self) -> str:
+    def get_image(self, position: object) -> str:
         raise NotImplementedError()
 
     @abstractmethod

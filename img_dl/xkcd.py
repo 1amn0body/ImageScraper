@@ -1,22 +1,57 @@
-from img_dl.dl_img import DlImg
+from img_dl.dl_img import DownloadImages
 
 import requests
 from bs4 import BeautifulSoup
-from os.path import sep
 
 
-class XKCD(DlImg):
+class XKCD(DownloadImages):
     base_url = "https://xkcd.com/"
 
-    soup = BeautifulSoup(requests.get(base_url).text, 'html.parser')
+    def save_image(self, soup: BeautifulSoup) -> None:
+        imgs = soup.find(id='comic').findAll('img')
 
-    position: int
+        for img in imgs:
+            super(XKCD, self).save_image('https:' + img['src'])
 
-    def get_latest_image(self) -> str:
-        pass
+            # TODO bring comment to image...
+            # img['title']
 
-    def get_image(self) -> str:
-        pass
+    def get_latest_image(self) -> int:
+        try:
+            soup = BeautifulSoup(requests.get(self.base_url).text, 'html.parser')
+            self.save_image(soup)
+
+            prev_link = soup.find('ul', {'class': ['comicNav']}).find('a', {'rel': ['prev']})['href']
+            return int(prev_link.replace('/', ''))
+
+        except requests.RequestException:
+            print(f"Error getting '{self.base_url}'.")
+        except Exception:
+            print("An error occurred.")
+
+        return 0
+
+    def get_image(self, position: int) -> None:
+        url = self.base_url + str(position)
+
+        try:
+            soup = BeautifulSoup(requests.get(url).text, 'html.parser')
+            self.save_image(soup)
+        except requests.RequestException:
+            print(f"Error getting '{url}'.")
+        except Exception:
+            print("An error occurred.")
 
     def get_from_count(self) -> None:
-        pass
+        if self.count > 0:
+            pos_now = self.get_latest_image()
+
+            i = 0
+            while i < self.count - 1 and pos_now > 0:
+                pos = pos_now - i
+                if pos >= 0:
+                    self.get_image(pos_now - i)
+                else:
+                    break
+
+                i += 1
