@@ -2,7 +2,7 @@ from img_dl import XKCD, APOD
 
 
 def run():
-    path = ""
+    path = "./imgs"
 
     APOD(path, 10).get_from_count()
 
