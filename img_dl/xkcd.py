@@ -25,7 +25,7 @@ class XKCD(DownloadImages):
             return int(prev_link.replace('/', ''))
 
         except requests.RequestException:
-            print(f"Error getting '{self.base_url}'.")
+            print(f"Error requesting '{self.base_url}'.")
         except Exception:
             print("An error occurred.")
 
@@ -38,7 +38,7 @@ class XKCD(DownloadImages):
             soup = BeautifulSoup(requests.get(url).text, 'html.parser')
             self.save_image(soup)
         except requests.RequestException:
-            print(f"Error getting '{url}'.")
+            print(f"Error requesting '{url}'.")
         except Exception:
             print("An error occurred.")
 
@@ -49,7 +49,7 @@ class XKCD(DownloadImages):
             i = 0
             while i < self.count - 1 and pos_now > 0:
                 pos = pos_now - i
-                if pos >= 0:
+                if pos > 0:
                     self.get_image(pos_now - i)
                 else:
                     break
