@@ -1,14 +1,16 @@
 from abc import ABC, abstractmethod
 
+from os.path import basename
+from os import sep, access, W_OK
+
 import requests
-from os.path import basename, sep
 
 
 class DownloadImages(ABC):
     base_url: str
+    base_path: str
 
     saved_list: list = []
-    base_path: str
     count: int
 
     def __init__(self, base_path: str, count: int = 0) -> None:
@@ -17,19 +19,21 @@ class DownloadImages(ABC):
 
     def save_image(self, img_link: str) -> None:
         file_name = basename(img_link)
+        if access(self.base_path, W_OK):
+            try:
+                with open(self.base_path + sep + file_name, 'xb') as f:
+                    f.write(requests.get(img_link).content)
 
-        try:
-            with open(self.base_path + sep + file_name, 'xb') as f:
-                f.write(requests.get(img_link).content)
-
-            self.saved_list.append(file_name)
-        except PermissionError:
-            print(f"Writing of file '{file_name}' not allowed.")
-        except FileExistsError:
-            print(f"File '{file_name}' already exists.")
-        except Exception as e:
-            print(f"Error creating file '{file_name}' and or appending content.")
-            print(e)
+                self.saved_list.append(file_name)
+            except PermissionError:
+                print(f"Insufficient permissions for writing to file '{file_name}' at path '{self.base_path}'.")
+            except FileExistsError:
+                print(f"File '{file_name}' already exists.")
+            except Exception as e:
+                print(f"Error creating file '{file_name}' at path '{self.base_path}' and or appending content.")
+                print(e)
+        else:
+            print(f"Insufficient permissions for writing at path '{self.base_path}'.")
 
     def get_saved_list(self) -> list:
         return self.saved_list
