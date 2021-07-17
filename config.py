@@ -24,8 +24,11 @@ class ConfigCreator:
         else:
             self.write_config()
 
-        if self.config_data['saved_images'] is None:
+        if 'saved_images' not in self.config_data:
             self.config_data['saved_images'] = []
+
+        if self.config_data.get('remove_saved', default=False):
+            self.remove_saved()
 
     def test_permissions(self) -> None:
         if access(curdir, R_OK):
@@ -161,23 +164,23 @@ class ConfigCreator:
 
     # call needed info for scraper
     def get_save_path(self) -> str:
-        save_path = self.config_data['save_path']
+        save_path = self.config_data.get('save_path', default=False)
 
-        if save_path is not None:
+        if save_path is str and len(save_path) > 0:
             return path.join(save_path)
         return path.join(curdir, 'images')
 
     def get_count_apod(self) -> int:
-        count_apod = self.config_data['count_apod']
-        if count_apod is not None:
+        count_apod = self.config_data.get('count_apod', default=0)
+        if count_apod is int:
             if count_apod <= 0:
                 return 0
             return count_apod
         return 0
 
     def get_count_xkcd(self) -> int:
-        count_xkcd = self.config_data['count_xkcd']
-        if count_xkcd is not None:
+        count_xkcd = self.config_data.get('count_apod', default=0)
+        if count_xkcd is int:
             if count_xkcd <= 0:
                 return 0
             return count_xkcd

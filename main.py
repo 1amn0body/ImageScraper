@@ -6,8 +6,13 @@ def run():
     cfg = ConfigCreator()
     path = cfg.get_save_path()
 
-    APOD(path, cfg.get_count_apod()).get_from_count()
-    XKCD(path, cfg.get_count_xkcd()).get_from_count()
+    apod = APOD(path, cfg.get_count_apod())
+    apod.get_from_count()
+    cfg.update_saved(apod.saved_list)
+
+    xkcd = XKCD(path, cfg.get_count_xkcd())
+    xkcd.get_from_count()
+    cfg.update_saved(xkcd.saved_list)
 
 
 if __name__ == '__main__':
