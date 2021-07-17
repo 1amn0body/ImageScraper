@@ -120,6 +120,8 @@ class ConfigCreator:
             except Exception:
                 not_valid_msg()
 
+        print()
+
     def remove_saved(self) -> None:
         save_path = self.config_data.get('save_path')
         saved_images = set(self.config_data.get('saved_images'))
