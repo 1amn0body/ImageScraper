@@ -24,7 +24,7 @@ class ConfigCreator:
         else:
             self.write_config()
 
-        if self.config_data['saved_images'] is None:
+        if 'saved_images' not in self.config_data:
             self.config_data['saved_images'] = []
 
     def test_permissions(self) -> None:
