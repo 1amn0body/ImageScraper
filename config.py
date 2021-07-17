@@ -67,7 +67,14 @@ class ConfigCreator:
         while True:  # set save path for images
             try:
                 _save_path: path = path.join(input("Save path for the images: "))
-                if self.check_save_path(_save_path):
+                _path_ok: bool
+
+                if len(_save_path) == 0:
+                    _path_ok = self.check_save_path(path.join(curdir, 'images'))
+                else:
+                    _path_ok = self.check_save_path(_save_path)
+
+                if _path_ok:
                     break
             except Exception:
                 not_valid_msg()
