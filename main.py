@@ -10,7 +10,7 @@ def run():
     apod = APOD(path, cfg.get_count_apod())
     apod.get_from_count()
     cfg.update_saved(apod.saved_list)
-    print('Done.')
+    print('Done.\n')
 
     print('Downloading XKCD...')
     xkcd = XKCD(path, cfg.get_count_xkcd())

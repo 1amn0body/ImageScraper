@@ -21,6 +21,7 @@ class DownloadImages(ABC):
         file_name = basename(img_link)
         if access(self.base_path, W_OK):
             try:
+                print(f"Trying to save {file_name} now")
                 with open(self.base_path + sep + file_name, 'xb') as f:
                     f.write(requests.get(img_link).content)
                 self.saved_list.append(file_name)
