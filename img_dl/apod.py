@@ -41,8 +41,8 @@ class APOD(DownloadImages):
             self.get_latest_image()
             pos_now = date.today()
 
-            i = 0
-            while i < self.count - 1:
+            i = 1
+            while i < self.count:
                 self.get_image(pos_now - timedelta(days=i))
 
                 i += 1

@@ -5,7 +5,7 @@ import yaml
 
 class ConfigCreator:
     cfg_name: str = 'image-scraper-config.yaml'
-    cfg_path = curdir.join(cfg_name)
+    cfg_path = path.join(curdir, cfg_name)
 
     cfg_exists: bool = False
     cfg_isfile: bool = False
@@ -22,12 +22,13 @@ class ConfigCreator:
         if self.cfg_exists:
             self.read_config()
         else:
+            self.config_input()
             self.write_config()
 
         if 'saved_images' not in self.config_data:
             self.config_data['saved_images'] = []
 
-        if self.config_data.get('remove_saved', default=False):
+        if self.config_data.get('remove_saved', False):
             self.remove_saved()
 
     def test_permissions(self) -> None:
@@ -69,13 +70,8 @@ class ConfigCreator:
 
         while True:  # set save path for images
             try:
-                _save_path: path = path.join(input("Save path for the images: "))
-                _path_ok: bool
-
-                if len(_save_path) == 0:
-                    _path_ok = self.check_save_path(path.join(curdir, 'images'))
-                else:
-                    _path_ok = self.check_save_path(_save_path)
+                _save_path: str = input("Save path for the images: ")
+                _path_ok: bool = self.check_save_path(_save_path)
 
                 if _path_ok:
                     break
@@ -125,13 +121,12 @@ class ConfigCreator:
                 not_valid_msg()
 
     def remove_saved(self) -> None:
-        for num in range(len(self.config_data['saved_images'])):
-            img = self.config_data['saved_images'][num]
-            save_path = self.config_data['save_path']
+        save_path = self.config_data.get('save_path')
+        saved_images = self.config_data.get('saved_images')
 
+        for img in saved_images:
             try:
                 os.remove(path.join(save_path, img))
-                del self.config_data['saved_images'][num]
             except PermissionError:
                 print(f"Failed to remove '{img}' at '{save_path}'.")
             except FileNotFoundError:
@@ -139,6 +134,10 @@ class ConfigCreator:
             except Exception as e:
                 print(f"An unknown error occurred trying to remove '{img}' from '{save_path}'...")
                 print(f"Details:\n{e}")
+
+            self.config_data['saved_images'].remove(img)
+
+        self.update_saved([])
 
     def check_save_path(self, save_path) -> bool:
         if path.exists(save_path):
@@ -149,8 +148,15 @@ class ConfigCreator:
                 return False
         else:
             try:
-                os.mkdir(save_path)
-                self.config_data['save_path'] = str(save_path)
+                if len(save_path) > 0:
+                    os.mkdir(save_path)
+                    self.config_data['save_path'] = str(save_path)
+                else:
+                    _save_path = path.join(curdir, 'images')
+                    if not path.exists(_save_path):
+                        os.mkdir(_save_path)
+
+                    self.config_data['save_path'] = str(_save_path)
             except PermissionError:
                 print(f"Insufficient permissions for creating directory '{str(save_path)}'...")
                 return False
@@ -158,32 +164,33 @@ class ConfigCreator:
                 print(f"Error creating directory '{str(save_path)}'...")
                 print(f"Details:\n{e}")
                 return False
-            self.config_data['save_path'] = str(save_path)
-
         return True
 
     # call needed info for scraper
     def get_save_path(self) -> str:
-        save_path = self.config_data.get('save_path', default=False)
+        _save_path = path.join(curdir, 'images')
+        save_path = self.config_data.get('save_path', _save_path)
 
-        if save_path is str and len(save_path) > 0:
-            return path.join(save_path)
-        return path.join(curdir, 'images')
+        if self.check_save_path(save_path):
+            return save_path
+        return _save_path
 
     def get_count_apod(self) -> int:
-        count_apod = self.config_data.get('count_apod', default=0)
-        if count_apod is int:
-            if count_apod <= 0:
-                return 0
+        count_apod: int = self.config_data.get('count_apod', 0)
+
+        if count_apod > 0:
             return count_apod
+
+        self.config_data['count_apod'] = 0
         return 0
 
     def get_count_xkcd(self) -> int:
-        count_xkcd = self.config_data.get('count_apod', default=0)
-        if count_xkcd is int:
-            if count_xkcd <= 0:
-                return 0
+        count_xkcd: int = self.config_data.get('count_xkcd', 0)
+
+        if count_xkcd > 0:
             return count_xkcd
+
+        self.config_data['count_xkcd'] = 0
         return 0
 
 
