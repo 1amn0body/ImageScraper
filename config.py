@@ -60,8 +60,8 @@ class ConfigCreator:
         else:
             print(f"Insufficient permissions to write config file '{self.cfg_name}' at '{curdir}'.")
 
-    def update_saved(self, added_saved_images: list) -> None:
-        self.config_data['saved_images'] += added_saved_images
+    def update_saved(self, added_saved_images: list = []) -> None:
+        self.config_data['saved_images'] = list(set(self.config_data['saved_images'] + added_saved_images))
         self.write_config()
 
     def config_input(self) -> None:
@@ -122,7 +122,7 @@ class ConfigCreator:
 
     def remove_saved(self) -> None:
         save_path = self.config_data.get('save_path')
-        saved_images = self.config_data.get('saved_images')
+        saved_images = set(self.config_data.get('saved_images'))
 
         for img in saved_images:
             try:
@@ -136,8 +136,7 @@ class ConfigCreator:
                 print(f"Details:\n{e}")
 
             self.config_data['saved_images'].remove(img)
-
-        self.update_saved([])
+        self.update_saved()
 
     def check_save_path(self, save_path) -> bool:
         if path.exists(save_path):

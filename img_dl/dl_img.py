@@ -23,15 +23,16 @@ class DownloadImages(ABC):
             try:
                 with open(self.base_path + sep + file_name, 'xb') as f:
                     f.write(requests.get(img_link).content)
-
                 self.saved_list.append(file_name)
             except PermissionError:
                 print(f"Insufficient permissions for writing to file '{file_name}' at path '{self.base_path}'.")
             except FileExistsError:
                 print(f"File '{file_name}' already exists.")
+                self.saved_list.append(file_name)
             except Exception as e:
                 print(f"Error creating file '{file_name}' at path '{self.base_path}' and or appending content.")
                 print(e)
+
         else:
             print(f"Insufficient permissions for writing at path '{self.base_path}'.")
 
