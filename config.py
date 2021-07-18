@@ -1,4 +1,6 @@
 from os import path, curdir, access, R_OK, W_OK
+from sys import platform
+
 import os
 import yaml
 
@@ -171,8 +173,15 @@ class ConfigCreator:
                 return False
         return True
 
-    # call needed info for scraper
-    def get_save_path(self) -> str:
+    def os_background_image(self):
+        if platform.startswith('linux'):
+            print('Linux')
+        elif platform.startswith('darwin'):
+            print('macOS')
+        elif platform.startswith('win32'):
+            print('Windows')
+
+    def get_save_path(self) -> str:  # call needed info for scraper
         _save_path = path.join(curdir, 'images')
         save_path = self.config_data.get('save_path', _save_path)
 
