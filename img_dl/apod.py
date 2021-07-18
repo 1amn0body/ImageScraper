@@ -9,9 +9,9 @@ class APOD(DownloadImages):
     base_url = "https://apod.nasa.gov/apod/"
 
     def save_image(self, soup: BeautifulSoup) -> None:
-        imgs = soup.findAll('img')
+        img_s = soup.findAll('img')
 
-        for img in imgs:
+        for img in img_s:
             super(APOD, self).save_image(self.base_url + img['src'])
 
     def get_latest_image(self) -> None:
@@ -22,8 +22,9 @@ class APOD(DownloadImages):
             self.save_image(soup)
         except requests.RequestException:
             print(f"Error requesting '{url}'.")
-        except Exception:
+        except Exception as e:
             print('An error occurred.')
+            print(f"Details:\n{e}")
 
     def get_image(self, position: date) -> None:
         url = self.base_url + f"ap{position.strftime('%Y%m%d')[2:]}.html"
@@ -33,8 +34,9 @@ class APOD(DownloadImages):
             self.save_image(soup)
         except requests.RequestException:
             print(f"Error requesting '{url}'.")
-        except Exception:
+        except Exception as e:
             print('An error occurred.')
+            print(f"Details:\n{e}")
 
     def get_from_count(self) -> None:
         if self.count > 0:

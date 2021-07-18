@@ -13,9 +13,12 @@ class ConfigCreator:
     read_permission: bool = False
     write_permission: bool = False
 
+    scraper_names: list
     config_data: dict = {}
 
-    def __init__(self) -> None:
+    def __init__(self, scraper_names: list = []) -> None:
+        self.scraper_names = scraper_names
+
         self.test_permissions()
 
         # configure
@@ -92,35 +95,36 @@ class ConfigCreator:
             except Exception:
                 not_valid_msg()
 
-        while True:  # xkcd count
-            try:
-                _count_xkcd: int = int(input("Image count for xkcd: "))
-
-                if _count_xkcd > 0:
-                    self.config_data['count_xkcd'] = _count_xkcd
-                else:
-                    self.config_data['count_xkcd'] = 0
-                break
-            except TypeError:
-                print("Your input was not a number. Try again.\n")
-            except Exception:
-                not_valid_msg()
-
-        while True:  # apod count
-            try:
-                _count_apod: int = int(input("Image count for 'Astronomy Picture of the Day': "))
-
-                if _count_apod > 0:
-                    self.config_data['count_apod'] = _count_apod
-                else:
-                    self.config_data['count_apod'] = 0
-                break
-            except TypeError:
-                print("Your input was not a number. Try again.\n")
-            except Exception:
-                not_valid_msg()
+        self.add_scraper_counts()
 
         print()
+
+    def add_scraper(self, scraper: dict):
+        """
+        scraper scheme:
+
+        scraper = {
+            'name': 'your_scraper_name'
+            'long_name': 'your long name'  # is optional
+        }
+        """
+        self.scraper_names.append(scraper)
+
+    def add_scraper_counts(self):
+        for scraper in self.scraper_names:
+            while True:  # count
+                try:
+                    count: int = int(input(f"Image count for '{scraper.get('long_name', scraper.get('name'))}': "))
+
+                    if count > 0:
+                        self.config_data[f"count_{scraper.get('name')}"] = count
+                    else:
+                        self.config_data[f"count_{scraper.get('name')}"] = 0
+                    break
+                except TypeError:
+                    print("Your input was not a number. Try again.\n")
+                except Exception:
+                    not_valid_msg()
 
     def remove_saved(self) -> None:
         save_path = self.config_data.get('save_path')
@@ -176,22 +180,13 @@ class ConfigCreator:
             return save_path
         return _save_path
 
-    def get_count_apod(self) -> int:
-        count_apod: int = self.config_data.get('count_apod', 0)
+    def get_scraper_count(self, name: str):
+        count: int = self.config_data.get(f"count_{name}", 0)
 
-        if count_apod > 0:
-            return count_apod
+        if count > 0:
+            return count
 
-        self.config_data['count_apod'] = 0
-        return 0
-
-    def get_count_xkcd(self) -> int:
-        count_xkcd: int = self.config_data.get('count_xkcd', 0)
-
-        if count_xkcd > 0:
-            return count_xkcd
-
-        self.config_data['count_xkcd'] = 0
+        self.config_data[f"count_{name}"] = 0
         return 0
 
 

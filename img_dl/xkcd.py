@@ -8,9 +8,9 @@ class XKCD(DownloadImages):
     base_url = "https://xkcd.com/"
 
     def save_image(self, soup: BeautifulSoup) -> None:
-        imgs = soup.find(id='comic').findAll('img')
+        img_s = soup.find(id='comic').findAll('img')
 
-        for img in imgs:
+        for img in img_s:
             super(XKCD, self).save_image('https:' + img['src'])
 
             # TODO bring comment to image...
@@ -26,8 +26,9 @@ class XKCD(DownloadImages):
 
         except requests.RequestException:
             print(f"Error requesting '{self.base_url}'.")
-        except Exception:
+        except Exception as e:
             print("An error occurred.")
+            print(f"Details:\n{e}")
 
         return 0
 
@@ -39,8 +40,9 @@ class XKCD(DownloadImages):
             self.save_image(soup)
         except requests.RequestException:
             print(f"Error requesting '{url}'.")
-        except Exception:
+        except Exception as e:
             print("An error occurred.")
+            print(f"Details:\n{e}")
 
     def get_from_count(self) -> None:
         if self.count > 0:
