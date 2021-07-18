@@ -1,8 +1,9 @@
 from img_dl.dl_img import DownloadImages
 
-import requests
 from bs4 import BeautifulSoup
 from datetime import date, timedelta
+
+import requests
 
 
 class APOD(DownloadImages):
