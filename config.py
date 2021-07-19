@@ -82,19 +82,7 @@ class ConfigCreator:
             except Exception:
                 not_valid_msg()
 
-        while True:  # remove saved images?
-            try:
-                _remove_saved: str = input("Remove saved images (yes/no): ")[0].lower()
-
-                if _remove_saved == 'y':
-                    self.config_data['remove_saved'] = True
-                elif _remove_saved == 'n':
-                    self.config_data['remove_saved'] = False
-                else:
-                    continue
-                break
-            except Exception:
-                not_valid_msg()
+        self.config_data['remove_saved'] = test_yes_no('Remove saved images')
 
         self.add_scraper_counts()
 
@@ -175,12 +163,29 @@ class ConfigCreator:
     def os_background_image(self):
         # TODO set background image of desktop in os specific way
 
-        if platform.startswith('linux'):
-            print('Linux')
-        elif platform.startswith('darwin'):
-            print('macOS')
-        elif platform.startswith('win32'):
-            print('Windows')
+        if test_yes_no('Change background image settings to downloaded images'):
+            img_path = self.get_save_path()
+
+            if platform.startswith('linux'):
+                print('Linux')
+
+                distro: str = os.uname().sysname.lower()
+                if distro.find('debian') or distro.find('ubuntu'):
+                    pass
+                elif distro.find('gentoo'):
+                    pass
+                elif distro.find('arch'):
+                    pass
+                elif distro.find('_'):
+                    pass
+                elif distro.find('_'):
+                    pass
+                else:
+                    print('Unimplemented Linux Distribution')
+            elif platform.startswith('darwin'):
+                print('macOS')
+            elif platform.startswith('win32'):
+                print('Windows')
 
     def get_save_path(self) -> str:  # call needed info for scraper
         _save_path = path.join(curdir, 'images')
@@ -202,3 +207,18 @@ class ConfigCreator:
 
 def not_valid_msg() -> None:
     print("Your input was not valid. Try again.\n")
+
+
+def test_yes_no(question: str) -> bool:
+    while True:  # remove saved images?
+        try:
+            _remove_saved: str = input(f"{question} (yes/no): ")[0].lower()
+
+            if _remove_saved == 'y':
+                return True
+            elif _remove_saved == 'n':
+                return False
+            else:
+                continue
+        except Exception:
+            not_valid_msg()
