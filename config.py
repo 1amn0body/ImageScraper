@@ -178,14 +178,13 @@ class ConfigCreator:
                     pass
                 elif distro.find('_'):
                     pass
-                elif distro.find('_'):
-                    pass
                 else:
                     print('Unimplemented Linux Distribution')
             elif platform.startswith('darwin'):
                 print('macOS')
             elif platform.startswith('win32'):
                 print('Windows')
+                # idea: https://github.com/judge2020/ghstatic.judge.sh/blob/master/ducky/wallpaper.ps1
 
     def get_save_path(self) -> str:  # call needed info for scraper
         _save_path = path.join(curdir, 'images')
