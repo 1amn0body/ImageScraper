@@ -1,5 +1,3 @@
-import sys
-
 from img_dl import XKCD, APOD
 from config import ConfigCreator
 

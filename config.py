@@ -1,5 +1,5 @@
 from os import path, curdir, access, R_OK, W_OK
-from sys import platform
+from set_background import SetBackground
 
 import os
 import yaml
@@ -166,25 +166,7 @@ class ConfigCreator:
         if test_yes_no('Change background image settings to downloaded images'):
             img_path = self.get_save_path()
 
-            if platform.startswith('linux'):
-                print('Linux')
-
-                distro: str = os.uname().sysname.lower()
-                if distro.find('debian') or distro.find('ubuntu'):
-                    pass
-                elif distro.find('gentoo'):
-                    pass
-                elif distro.find('arch'):
-                    pass
-                elif distro.find('_'):
-                    pass
-                else:
-                    print('Unimplemented Linux Distribution')
-            elif platform.startswith('darwin'):
-                print('macOS')
-            elif platform.startswith('win32'):
-                print('Windows')
-                # idea: https://github.com/judge2020/ghstatic.judge.sh/blob/master/ducky/wallpaper.ps1
+            SetBackground(img_path)
 
     def get_save_path(self) -> str:  # call needed info for scraper
         _save_path = path.join(curdir, 'images')
