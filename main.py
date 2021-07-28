@@ -1,5 +1,5 @@
-from img_dl import XKCD, APOD
 from config import ConfigCreator
+from img_dl import XKCD, APOD
 
 
 def run():
