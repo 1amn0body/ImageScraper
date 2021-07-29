@@ -24,6 +24,16 @@ class SetBackground:
         # use win api (PyWin32)
         # https://stackoverflow.com/questions/1977694/how-can-i-change-my-desktop-background-with-python
         # https://docs.python.org/3/library/winreg.html#winreg.OpenKey
+
+        bg_style: dict = {
+            'center': [0, 0],
+            'tile': [0, 1],
+            'fill': [10, 0],
+            'adjust': [6, 0],
+            'lengthen': [2, 0],
+            'stretch': [22, 0],
+        }
+
         def __init__(self, img_path: str, background_style: str = 'center') -> None:
 
             # SET IMAGES
@@ -34,16 +44,7 @@ class SetBackground:
             ctypes.windll.user32.SystemparametersInfoW(spi_set_desk_wallpaper, 0, img_path, update_ini_file | send_win_ini_change)
 
             # REGISTRY ACTIONS
-            bg_style: dict = {
-                'center': [0, 0],
-                'tile': [0, 1],
-                'fill': [10, 0],
-                'adjust': [6, 0],
-                'lengthen': [2, 0],
-                'stretch': [22, 0],
-            }
-
-            use_bg_style = bg_style.get(background_style, [0, 0])
+            use_bg_style = self.bg_style.get(self.choose_bg_style())
 
             # TODO needs elevated permissions...
             reg_path: str = r"Control Panel\Desktop"
@@ -56,6 +57,16 @@ class SetBackground:
             # winreg.QueryValueEx(reg_desktop, "TileWallpaper")
 
             winreg.CloseKey(reg_desktop)
+
+        def choose_bg_style(self) -> str:
+            while True:
+                style: str = input(f"Choose Background Style ({[_ for _ in self.bg_style.keys()]}): ").lower()
+
+                if len(style) == 0:
+                    return 'center'
+                elif style in self.bg_style.keys():
+                    return style
+                print(f"Your style '{style}' is not valid.\n")
 
     class Mac:
         def __init__(self, img_path: str) -> None:
