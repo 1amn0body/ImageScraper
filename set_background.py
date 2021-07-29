@@ -25,16 +25,16 @@ class SetBackground:
         # https://stackoverflow.com/questions/1977694/how-can-i-change-my-desktop-background-with-python
         # https://docs.python.org/3/library/winreg.html#winreg.OpenKey
 
-        bg_style: dict = {
+        bg_styles: dict = {
             'center': [0, 0],
             'tile': [0, 1],
             'fill': [10, 0],
             'adjust': [6, 0],
-            'lengthen': [2, 0],
+            'fit': [2, 0],
             'stretch': [22, 0],
         }
 
-        def __init__(self, img_path: str, background_style: str = 'center') -> None:
+        def __init__(self, img_path: str) -> None:
 
             # SET IMAGES
             spi_set_desk_wallpaper: int = 0x0014  # =20
@@ -44,14 +44,14 @@ class SetBackground:
             ctypes.windll.user32.SystemparametersInfoW(spi_set_desk_wallpaper, 0, img_path, update_ini_file | send_win_ini_change)
 
             # REGISTRY ACTIONS
-            use_bg_style = self.bg_style.get(self.choose_bg_style())
+            bg_style = self.bg_styles.get(self.choose_bg_style())
 
             # TODO needs elevated permissions...
             reg_path: str = r"Control Panel\Desktop"
             reg_desktop = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, reg_path, 0, winreg.KEY_WRITE)
 
-            winreg.SetValueEx(reg_desktop, "WallpaperStyle", 0, winreg.REG_SZ, use_bg_style[0])
-            winreg.SetValueEx(reg_desktop, "TileWallpaper", 0, winreg.REG_SZ, use_bg_style[1])
+            winreg.SetValueEx(reg_desktop, "WallpaperStyle", 0, winreg.REG_SZ, bg_style[0])
+            winreg.SetValueEx(reg_desktop, "TileWallpaper", 0, winreg.REG_SZ, bg_style[1])
 
             # winreg.QueryValueEx(reg_desktop, "WallpaperStyle")
             # winreg.QueryValueEx(reg_desktop, "TileWallpaper")
@@ -60,11 +60,11 @@ class SetBackground:
 
         def choose_bg_style(self) -> str:
             while True:
-                style: str = input(f"Choose Background Style ({[_ for _ in self.bg_style.keys()]}): ").lower()
+                style: str = input(f"Choose Background Style {[_ for _ in self.bg_styles.keys()]}: ").lower()
 
                 if len(style) == 0:
                     return 'center'
-                elif style in self.bg_style.keys():
+                elif style in self.bg_styles.keys():
                     return style
                 print(f"Your style '{style}' is not valid.\n")
 
