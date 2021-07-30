@@ -14,7 +14,7 @@ You can build the executable yourself by just using [pyinstaller](https://pyinst
 ```bash
 pip install pyinstaller
 
-pyinstaller main.py --onefile
+pyinstaller main.py --onefile --name ImageScraper --icon icon/image_scraper_icon.ico
 ```
 
 ## Features
