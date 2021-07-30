@@ -1,5 +1,4 @@
 from img_dl.dl_img import DownloadImages
-
 from bs4 import BeautifulSoup
 
 import requests
