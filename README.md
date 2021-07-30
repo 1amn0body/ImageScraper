@@ -1,5 +1,5 @@
 # ImageScraper
-<img width=128px align=right src="https://github.com/1amn0body/ImageScraper/blob/master/icon/image_scraper_icon.png">
+[<img width=128px align=right src="https://github.com/1amn0body/ImageScraper/blob/master/icon/image_scraper_icon.png">](https://github.com/1amn0body/ImageScraper/releases)
 
 The ImageScraper is a cross-platform tool for downloading a specified count from [xkcd](https://xkcd.com) or [Astronomy Picture of the Day](https://apod.nasa.gov).
 
