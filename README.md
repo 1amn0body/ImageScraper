@@ -26,6 +26,7 @@ pyinstaller main.py --onefile --name ImageScraper --icon icon/image_scraper_icon
    - [x] List saved images
    - [x] Auto-remove option
    - [ ] Test for internet connection before auto-removing
+   - [ ] Progress bar
 - [ ] Automatically set background image in a platform and desktop environment specific way
    - [ ] Windows
    - [ ] Mac
