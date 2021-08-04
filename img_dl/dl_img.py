@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
-
-from os.path import basename
 from os import sep, access, W_OK
+from os.path import basename
 
 import requests
 
@@ -21,9 +20,10 @@ class DownloadImages(ABC):
         file_name = basename(img_link)
         if access(self.base_path, W_OK):
             try:
-                print(f"Trying to save '{file_name}'...")
+                print(f"Trying to save '{file_name}'...", end=' ')
                 with open(self.base_path + sep + file_name, 'xb') as f:
                     f.write(requests.get(img_link).content)
+                print("Done")
                 self.saved_list.append(file_name)
             except PermissionError:
                 print(f"Insufficient permissions for writing to file '{file_name}' at path '{self.base_path}'.")

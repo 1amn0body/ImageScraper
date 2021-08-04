@@ -1,8 +1,6 @@
 from sys import platform
 
 import os
-import ctypes
-import winreg
 
 
 class SetBackground:
@@ -35,9 +33,23 @@ class SetBackground:
         }
 
         def __init__(self, img_path: str) -> None:
+            """
+            from command_runner.elevate import elevate
+            elevate(self.set_bg(img_path))  # elevation fails???
+
+            from elevate import elevate
+            elevate(show_console=False, graphical=True)
+            self.set_bg(img_path)
+            """
+
+            self.set_bg(img_path)
+
+        def set_bg(self, img_path: str) -> None:
+            import ctypes
+            import winreg
 
             # SET IMAGES
-            spi_set_desk_wallpaper: int = 0x0014  # =20
+            spi_set_desk_wallpaper: int = 0x14  # =20
             update_ini_file: int = 0x01
             send_win_ini_change: int = 0x02
 
@@ -46,15 +58,15 @@ class SetBackground:
             # REGISTRY ACTIONS
             bg_style = self.bg_styles.get(self.choose_bg_style())
 
-            # TODO needs elevated permissions...
+            # needs elevated permissions...
             reg_path: str = r"Control Panel\Desktop"
             reg_desktop = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, reg_path, 0, winreg.KEY_WRITE)
 
             winreg.SetValueEx(reg_desktop, "WallpaperStyle", 0, winreg.REG_SZ, bg_style[0])
             winreg.SetValueEx(reg_desktop, "TileWallpaper", 0, winreg.REG_SZ, bg_style[1])
 
-            # winreg.QueryValueEx(reg_desktop, "WallpaperStyle")
-            # winreg.QueryValueEx(reg_desktop, "TileWallpaper")
+            # print(winreg.QueryValueEx(reg_desktop, "WallpaperStyle"))
+            # print(winreg.QueryValueEx(reg_desktop, "TileWallpaper"))
 
             winreg.CloseKey(reg_desktop)
 

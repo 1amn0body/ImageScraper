@@ -36,6 +36,8 @@ class ConfigCreator:
         if self.config_data.get('remove_saved', False):
             self.remove_saved()
 
+        self.os_background_image(set_bg=self.config_data.get('set_bg', False))
+
     def test_permissions(self) -> None:
         if access(curdir, R_OK):
             self.read_permission = True
@@ -85,6 +87,8 @@ class ConfigCreator:
         self.config_data['remove_saved'] = test_yes_no('Remove saved images')
 
         self.add_scraper_counts()
+
+        self.os_background_image(test_yes_no('Change background image settings to downloaded images'))
 
         print()
 
@@ -160,13 +164,13 @@ class ConfigCreator:
                 return False
         return True
 
-    def os_background_image(self):
-        # TODO set background image of desktop in os specific way
-
-        if test_yes_no('Change background image settings to downloaded images'):
+    def os_background_image(self, set_bg=False):
+        if set_bg:
             img_path = self.get_save_path()
 
             SetBackground(img_path)
+
+        self.config_data['set_bg'] = False
 
     def get_save_path(self) -> str:  # call needed info for scraper
         _save_path = path.join(curdir, 'images')

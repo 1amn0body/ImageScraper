@@ -55,5 +55,4 @@ class XKCD(DownloadImages):
                     self.get_image(pos_now - i)
                 else:
                     break
-
                 i += 1

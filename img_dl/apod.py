@@ -1,5 +1,4 @@
 from img_dl.dl_img import DownloadImages
-
 from bs4 import BeautifulSoup
 from datetime import date, timedelta
 
@@ -47,5 +46,4 @@ class APOD(DownloadImages):
             i = 1
             while i < self.count:
                 self.get_image(pos_now - timedelta(days=i))
-
                 i += 1
