@@ -1,7 +1,7 @@
 # ImageScraper
 [<img width=128px align=right src="https://github.com/1amn0body/ImageScraper/blob/master/icon/image_scraper_icon.png">](https://github.com/1amn0body/ImageScraper/releases)
 
-The ImageScraper is a cross-platform tool for downloading a specified count from [xkcd](https://xkcd.com), [Astronomy Picture of the Day](https://apod.nasa.gov) and [Existential Comics](https://existentialcomics.com).
+The ImageScraper is a cross-platform tool for downloading a specified count from [xkcd](https://xkcd.com), [Astronomy Picture of the Day](https://apod.nasa.gov) and [Existential Comics](https://existentialcomics.com) (at the moment on the branch `system_background_image`).
 
 With the config setup at the first start you can set the count and the save path. You can change it in the config file `image-scraper-config.yaml` or by deleting it and starting the application again.
 
