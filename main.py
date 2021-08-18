@@ -1,5 +1,5 @@
 from config import ConfigCreator
-from img_dl import XKCD, APOD
+from img_dl import XKCD, APOD, ExistentialComics
 
 
 def run():
@@ -11,6 +11,10 @@ def run():
         {
             'name': 'xkcd',
             'long_name': 'XKCD'
+        },
+        {
+            'name': 'existentialcomics',
+            'long_name': 'Existential Comics'
         }
     ])
     path = cfg.get_save_path()
@@ -25,6 +29,12 @@ def run():
     xkcd = XKCD(path, cfg.get_scraper_count('xkcd'))
     xkcd.get_from_count()
     cfg.update_saved(xkcd.saved_list)
+    print('Done.\n')
+
+    print('Downloading Existential Comics...')
+    existentialcomics = ExistentialComics(path, cfg.get_scraper_count('existentialcomics'))
+    existentialcomics.get_from_count()
+    cfg.update_saved(existentialcomics.saved_list)
     print('Done.')
 
 
