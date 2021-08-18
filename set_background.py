@@ -72,7 +72,7 @@ class SetBackground:
 
         def choose_bg_style(self) -> str:
             while True:
-                style: str = input(f"Choose Background Style {[_ for _ in self.bg_styles.keys()]}: ").lower()
+                style: str = input(f"Choose Background Style {self.bg_styles.keys()}: ").lower()
 
                 if len(style) == 0:
                     return 'center'
