@@ -26,12 +26,12 @@ class DownloadImages(ABC):
                 print("Done")
                 self.saved_list.append(file_name)
             except PermissionError:
-                print(f"Insufficient permissions for writing to file '{file_name}' at path '{self.base_path}'.")
+                print(f"Insufficient permissions for writing to file at path '{self.base_path}'.")
             except FileExistsError:
-                print(f"File '{file_name}' already exists.")
+                print(f"File already exists.")
                 self.saved_list.append(file_name)
             except Exception as e:
-                print(f"Error creating file '{file_name}' at path '{self.base_path}' and or appending content.")
+                print(f"Error creating file at path '{self.base_path}' and or appending content.")
                 print(e)
 
         else:
@@ -42,11 +42,11 @@ class DownloadImages(ABC):
 
     # abstract methods
     @abstractmethod
-    def get_latest_image(self) -> str:
+    def get_latest_image(self) -> None:
         raise NotImplementedError()
 
     @abstractmethod
-    def get_image(self, position: object) -> str:
+    def get_image(self, position: object) -> None:
         raise NotImplementedError()
 
     @abstractmethod

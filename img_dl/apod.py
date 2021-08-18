@@ -9,7 +9,7 @@ class APOD(DownloadImages):
     base_url = "https://apod.nasa.gov/apod/"
 
     def save_image(self, soup: BeautifulSoup) -> None:
-        img_s = soup.findAll('img')
+        img_s = soup.find_all('img')
 
         for img in img_s:
             super(APOD, self).save_image(self.base_url + img['src'])
