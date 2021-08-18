@@ -12,9 +12,12 @@ This application is created with Python 3.9 and depends on following non standar
 - beautifulsoup4
 
 You can build the executable yourself by just using [pyinstaller](https://pyinstaller.org):
+
 ```bash
 pip install pyinstaller
+```
 
+```bash
 pyinstaller main.py --onefile --name ImageScraper --icon icon/image_scraper_icon.ico
 ```
 
